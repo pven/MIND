@@ -46,7 +46,7 @@ function showWindow(id) {
 	};
 };
 
-function logout() { 
+function logout() {
 	fetch(`${url_prefix}/api/auth/logout?api_key=${api_key}`, {
 		'method': 'POST'
 	})
@@ -56,11 +56,27 @@ function logout() {
 	});
 };
 
-// 
+//
+// Cookie helpers (used for api_key only)
+//
+function setCookie(name, value, days) {
+	const expires = new Date(Date.now() + days * 864e5).toUTCString();
+	document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Strict`;
+};
+
+function getCookie(name) {
+	const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+	return match ? decodeURIComponent(match[1]) : null;
+};
+
+function deleteCookie(name) {
+	document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Strict`;
+};
+
+//
 // LocalStorage
-// 
+//
 const default_values = {
-	'api_key': null,
 	'locale': 'en-GB',
 	'default_service': null,
 	'sorting_reminders': 'time',
@@ -71,7 +87,7 @@ const default_values = {
 function setupLocalStorage() {
 	if (!localStorage.getItem('MIND'))
 		localStorage.setItem('MIND', JSON.stringify(default_values));
-	
+
 	const missing_keys = [
 		...Object.keys(default_values)
 	].filter(e =>
@@ -93,22 +109,29 @@ function setupLocalStorage() {
 function getLocalStorage(keys) {
 	const storage = JSON.parse(localStorage.getItem('MIND'));
 	const result = {};
-	if (typeof keys === 'string')
-		result[keys] = storage[keys];
-		
-	else if (typeof keys === 'object')
+	if (typeof keys === 'string') {
+		result[keys] = (keys === 'api_key') ? getCookie('MIND_api_key') : storage[keys];
+	} else if (typeof keys === 'object') {
 		for (const key in keys)
-			result[key] = storage[key];
-
+			result[key] = (key === 'api_key') ? getCookie('MIND_api_key') : storage[key];
+	}
 	return result;
 };
 
 function setLocalStorage(keys_values) {
 	const storage = JSON.parse(localStorage.getItem('MIND'));
 
-	for (const [key, value] of Object.entries(keys_values))
-		storage[key] = value;
-	
+	for (const [key, value] of Object.entries(keys_values)) {
+		if (key === 'api_key') {
+			if (value === null)
+				deleteCookie('MIND_api_key');
+			else
+				setCookie('MIND_api_key', value, 30);
+		} else {
+			storage[key] = value;
+		}
+	}
+
 	localStorage.setItem('MIND', JSON.stringify(storage));
 	return;
 };

@@ -43,9 +43,7 @@ function login(data=null) {
 		return response.json();
 	})
 	.then(json => {
-		const new_stor = JSON.parse(localStorage.getItem('MIND'));
-		new_stor.api_key = json.result.api_key;
-		localStorage.setItem('MIND', JSON.stringify(new_stor));
+		setCookie('MIND_api_key', json.result.api_key, 30);
 		if (json.result.admin)
 			window.location.href = `${url_prefix}/admin`;
 		else
@@ -126,11 +124,11 @@ function checkAllowNewAccounts() {
 
 if (localStorage.getItem('MIND') === null)
 	localStorage.setItem('MIND', JSON.stringify(
-		{'api_key': null, 'locale': 'en-GB', 'default_service': null}
+		{'locale': 'en-GB', 'default_service': null}
 	))
 
 const url_prefix = document.getElementById('url_prefix').dataset.value;
-const api_key = JSON.parse(localStorage.getItem('MIND')).api_key;
+const api_key = getCookie('MIND_api_key');
 
 checkLogin();
 checkAllowNewAccounts();
