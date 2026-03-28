@@ -144,4 +144,6 @@ const url_prefix = document.getElementById('url_prefix').dataset.value;
 const api_key = getLocalStorage('api_key')['api_key'];
 if (api_key === null) {
 	window.location.href = `${url_prefix}/`;
+} else {
+	setCookie('MIND_api_key', api_key, 30);
 };
