@@ -65,8 +65,7 @@ function fillTable(table, results) {
 
 		if (table === Types.reminder) {
 			const time = document.createElement('p');
-			let offset = new Date(r.time * 1000).getTimezoneOffset() * -60;
-			let d = new Date((r.time + offset) * 1000);
+			let d = new Date(r.time * 1000);
 			let formatted_date = d.toLocaleString(getLocalStorage('locale')['locale']);
 
 			if (r.repeat_interval !== null) {

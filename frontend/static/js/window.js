@@ -219,9 +219,7 @@ function submitInfo() {
 	const cl = document.getElementById('info').classList;
 	if (cl.contains('show-add-reminder')) {
 		// Add reminder
-		data['time'] =
-			(new Date(inputs.time.value) / 1000)
-			+ (new Date(inputs.time.value).getTimezoneOffset() * 60);
+		data['time'] = new Date(inputs.time.value) / 1000;
 
 		if (type_buttons.repeat_button.dataset.selected === 'true') {
 			data['repeat_quantity'] = type_buttons.repeat_quantity.value;
@@ -262,9 +260,7 @@ function submitInfo() {
 		
 	} else if (cl.contains('show-edit-reminder')) {
 		// Edit reminder
-		data['time'] =
-			(new Date(inputs.time.value) / 1000)
-			+ (new Date(inputs.time.value).getTimezoneOffset() * 60);
+		data['time'] = new Date(inputs.time.value) / 1000;
 
 		if (type_buttons.repeat_button.dataset.selected === 'true') {
 			data['repeat_quantity'] = type_buttons.repeat_quantity.value;

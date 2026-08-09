@@ -1,3 +1,9 @@
+# creator: pven, supported by Claude
+# datum: 28-MAR-2026
+# versie: v1.0
+# changelog:
+#   v1.0 - Fork van Casvt/MIND met cookie-gebaseerde sessie-opslag
+
 # syntax=docker/dockerfile:1
 
 FROM python:3.8-slim-buster

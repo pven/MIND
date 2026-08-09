@@ -69,13 +69,8 @@ function showEdit(id, type) {
 		inputs.title.value = json.result.title;
 
 		if (type === Types.reminder) {
-			var trigger_date = new Date(
-				(json.result.time
-					+ new Date(json.result.time * 1000).getTimezoneOffset()
-					* -60
-				) * 1000
-			);
-			inputs.time.value = 
+			var trigger_date = new Date(json.result.time * 1000);
+			inputs.time.value =
 				trigger_date.toLocaleString('en-CA').slice(0,10)
 				+ 'T'
 				+ trigger_date.toTimeString().slice(0,5);
